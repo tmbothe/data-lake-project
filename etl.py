@@ -107,7 +107,7 @@ def process_log_data(spark, input_data, output_data):
     time_table = time_table.withColumn('weekday',date_format('start_time',"EEEE"))
 
     # write time table to parquet files partitioned by year and month
-    time_table.write.mode('overwrite').parquet(os.path.join(output_data,'time.parquet'))
+    time_table.write.mode('overwrite').partitionBy("year","month").parquet(os.path.join(output_data,'time.parquet'))
 
     # read in song data to use for songplays table
     song_df = spark.read.parquet(os.path.join(output_data,"songs.parquet"))
@@ -118,7 +118,7 @@ def process_log_data(spark, input_data, output_data):
     songplays_table = temp.select('songplay_id', 'start_time', 'user_id', 'level', 'song_id', 'artist_id', 'session_id', 'location', 'user_agent')
 
     # write songplays table to parquet files partitioned by year and month
-    songplays_table.write.mode('overwrite').parquet(os.path.join(output_data,"songplays.parquet"))
+    songplays_table.write.partitionBy(year("start_time"),month("start_time")).mode('overwrite').parquet(os.path.join(output_data,"songplays.parquet"))
 
 
 def main():
