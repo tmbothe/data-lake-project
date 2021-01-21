@@ -5,6 +5,9 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import udf, col
 from pyspark.sql.functions import year, month, dayofmonth, hour, weekofyear, date_format
 from pyspark.sql.types import StructType as R, StructField as Fld, DoubleType as Dbl, StringType as Str, IntegerType as Int, DateType as Date, LongType as long
+import  pyspark.sql.functions as F
+from pyspark.sql import types as t
+
 
 config = configparser.ConfigParser()
 config.read('dl.cfg')
@@ -69,6 +72,11 @@ def process_song_data(spark, input_data, output_data):
 
 
 def process_log_data(spark, input_data, output_data):
+    """
+    This process reads log data from S3,then filter only NextSong records.
+    Then, populates users,time,songs, and songsplay tables from the log data,
+    and finally writes back those tables back to s3 as parquet files.
+    """
     
     log_data = input_data + "log_data/*/*"
     df = spark.read.json(log_data)
