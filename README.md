@@ -101,7 +101,8 @@ For this project, we will building a star model with fact and dimension tables. 
 
 ## Installation 
 
-- Install python 3.8
+- Install [python 3.8](https://www.python.org)
+- Install [pyspark](https://medium.com/tinghaochen/how-to-install-pyspark-locally-94501eefe421)
 - Clone the current repository 
 - create IAM user in AWS and get the user access key and secret key
 - Add IAM access and secret keys to dl.cfg file.
@@ -110,29 +111,43 @@ For this project, we will building a star model with fact and dimension tables. 
 
 ## Examples of Queries
 
-- **First 10 artists:** 
+- **Number of Subscribers:** 
+For this query, we will just count the distinct users from users' table 
 
- `select * from artists  where  limit 10;`
+ `spark.sql("""SELECT COUNT(DISTINCT userId) as UserCount
+               FROM users
+          """).show()
+`
 
  **Result:**
 
-  ![image](https://raw.githubusercontent.com/tmbothe/Data_Warehouse_Project/main/images/first10_artst.PNG)
+  ![image](https://raw.githubusercontent.com/tmbothe/data-lake-project/main/images/userCount.PNG)
 
-- **10 most popular artists:**
+- **Subscribers by level:**
 
-`SELECT name as  artist_name ,COUNT(DISTINCT session_id) as play_count
- FROM songplays s
- JOIN artists a ON a.artist_id = s.artist_id
- WHERE level='paid'
- GROUP BY name
- ORDER BY play_count DESC
- LIMIT 10;
+`spark.sql("""SELECT level,COUNT(userId) subscribers
+             FROM users
+             GROUP BY level
+""").show()
 `
 
 **Result**:
 
- ![image](https://raw.githubusercontent.com/tmbothe/Data_Warehouse_Project/main/images/mostpopular_artist.PNG)
+ ![image](https://raw.githubusercontent.com/tmbothe/data-lake-project/main/images/subscriber_level.PNG)
 
+
+- **Subscribers by gender and level :**
+
+`
+spark.sql("""SELECT gender,level,COUNT(userId) subscribers
+             FROM users
+             GROUP BY gender,level
+""").show()
+`
+
+**Result**:
+
+ ![image](https://raw.githubusercontent.com/tmbothe/data-lake-project/main/images/subscriber_gender.PNG)
 
  
 
