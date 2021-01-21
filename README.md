@@ -1,12 +1,12 @@
 # Project: Data Modeling and ETL with Postgres and Python
 ## Project Description
 
-A compagny that has been collecting songs' data and users activity wants an efficient model to store and analyze the data. The data currently resides in folders in JSON format.
-This project consists of creating a database and build an ETL pipeline to store the data.
+A compagny that has been collecting songs' data and users activity wants an efficient model to store and analyze the data. The data currently resides in AWS S3 bucket in JSON format.
+This project consists of building an ETL pipeline that extracts the data from S3, processing using apache Spark, and loads back to AWS S3 in parquet format.
 This will help the analytics to analyze and derive insights from data.
 
 ## Data description
-There are two sources of dataset, the **Song Dataset** and the **Log Dataset** .  Both dataset are currently stored in amazon S3. These files will be read from redshift and stored in some staging tables. Then another process will extract the data from staging tables and load in final tables.
+There are two sources of dataset, the **Song Dataset** and the **Log Dataset** .  Both dataset are currently stored in amazon S3. These files will be read from Spark and stored in some staging tables. Then another process will extract the data from staging tables and load in final final files in S3.
 
 ### The Song Dataset
 The song data is stored at : `s3://udacity-dend/song_data`  
@@ -93,26 +93,19 @@ For this project, we will building a star model with fact and dimension tables. 
  
  ## Project Structure
  
- The project has multiple files, here is the description:
+ The project has two main files, here is the description:
  
- 1- `test.ipynb` :  displays the first few rows of each table to let you check your database.
+ 1 - `etl.py` :  reads and processes files from song_data and log_data and loads them into different tables structure as described above, then write them bas in AWS S3.
  
- 2- `create_tables.py` :  drops and creates your tables. You run this file to reset your tables before each time you run your ETL scripts.
- 
- 3- `etl.ipynb` :  reads and processes a single file from song_data and log_data and loads the data into your tables. This notebook contains detailed instructions on the ETL process for each of the tables.
- 
- 4 - `etl.py` :  reads and processes files from song_data and log_data and loads them into your tables. You can fill this out based on your work in the ETL notebook.
- 
- 5 - `sql_queries.py` : contains all your sql queries, and is imported into the last three files above.
+ 5 - `dl.cfg` : contains a valid user access key and secret key that has access to source bucket in S3.
 
 ## Installation 
 
 - Install python 3.8
 - Clone the current repository 
-- Launch a redshift cluster and create an IAM role that has read access to S3
-- Add redshift database and IAM role info to dwh.cfg
+- create IAM user in AWS and get the user access key and secret key
+- Add IAM access and secret keys to dl.cfg file.
 - Open command line and move to the repository folder
-- Run the `create_tables.py` file to drop and create the database as well as all tables
 - Run the `etl.py` file to read, extract, transform and load data to different tables
 
 ## Examples of Queries
