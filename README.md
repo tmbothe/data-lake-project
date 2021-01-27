@@ -1,4 +1,4 @@
-# Project: Data Lake: Extract raw data from S3, transform and laod data back to S3 using pyspark
+# Project: Data Lake: Extract raw data from S3, transform and load tables to S3 using pyspark
 ## Project Description
 
 A compagny that has been collecting songs' data and users activity wants an efficient model to store and analyze the data. The data currently resides in AWS S3 bucket in JSON format.
